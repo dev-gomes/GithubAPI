@@ -8,10 +8,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.githubapi.feature.details.view.DetailsScreen
 import com.example.githubapi.feature.users.view.UsersScreen
+import com.example.githubapi.ui.navigation.DETAILS_SCREEN_ARGS
 import com.example.githubapi.ui.navigation.Screen
 import com.example.githubapi.ui.theme.GithubAPITheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,10 +44,15 @@ fun MyApp(modifier: Modifier) {
     ) {
         composable(Screen.ListScreen.route) {
             UsersScreen(
-                navigationBlock = {
-                    // todo: add navigation
-                }
-            )
+                navigationBlock = { navController.navigate(it) })
+        }
+        composable(
+            route = Screen.DetailScreen.route,
+            arguments = listOf(navArgument(DETAILS_SCREEN_ARGS) { type = NavType.StringType })
+        ) { backStackEntry ->
+            val userId =
+                backStackEntry.arguments?.getString(DETAILS_SCREEN_ARGS) ?: return@composable
+            DetailsScreen(userId = userId)
         }
     }
 }

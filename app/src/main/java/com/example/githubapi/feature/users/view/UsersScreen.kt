@@ -42,7 +42,7 @@ fun UsersScreen(
             Log.d("TAG1", "UsersScreen: intent $userIntent")
             when (userIntent) {
                 is UserIntent.NavigateToDetail -> {
-                    // todo: navigate to detail screen
+                    navigationBlock(userIntent.route)
                 }
             }
         }

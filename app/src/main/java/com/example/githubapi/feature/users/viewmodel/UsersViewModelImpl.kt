@@ -6,6 +6,8 @@ import com.example.githubapi.feature.users.domain.GetUserListUseCase
 import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UiState
 import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UserEvent
 import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UserIntent
+import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UserIntent.NavigateToDetail
+import com.example.githubapi.ui.navigation.Screen.DetailScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,7 +34,7 @@ class UsersViewModelImpl @Inject constructor(
     override fun reduce(userEvent: UserEvent) {
         when (userEvent) {
             is UserEvent.OnItemClicked -> {
-                // todo: navigate to detail screen
+                _userIntent.trySend(NavigateToDetail(DetailScreen.createRoute(userEvent.userId)))
             }
         }
     }
