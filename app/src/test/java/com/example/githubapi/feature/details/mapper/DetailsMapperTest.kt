@@ -1,6 +1,6 @@
 package com.example.githubapi.feature.details.mapper
 
-import com.example.githubapi.models.Details
+import com.example.githubapi.feature.details.models.Details
 import com.example.githubapi.network.model.DetailsResponse
 import org.junit.Assert.assertEquals
 import org.junit.Test

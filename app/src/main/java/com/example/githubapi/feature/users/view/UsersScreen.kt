@@ -28,7 +28,7 @@ import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UiState
 import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UserEvent
 import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UserIntent
 import com.example.githubapi.feature.users.viewmodel.UsersViewModelImpl
-import com.example.githubapi.models.User
+import com.example.githubapi.feature.users.models.User
 import com.example.githubapi.ui.theme.GithubAPITheme
 
 @Composable

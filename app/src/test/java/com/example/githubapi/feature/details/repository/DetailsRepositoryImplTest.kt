@@ -1,7 +1,7 @@
 package com.example.githubapi.feature.details.repository
 
 import com.example.githubapi.feature.details.mapper.DetailsMapper
-import com.example.githubapi.models.Details
+import com.example.githubapi.feature.details.models.Details
 import com.example.githubapi.network.api.GitHubApiService
 import com.example.githubapi.network.model.DetailsResponse
 import io.mockk.coEvery

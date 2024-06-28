@@ -1,6 +1,6 @@
 package com.example.githubapi.feature.users.viewmodel
 
-import com.example.githubapi.models.User
+import com.example.githubapi.feature.users.models.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 

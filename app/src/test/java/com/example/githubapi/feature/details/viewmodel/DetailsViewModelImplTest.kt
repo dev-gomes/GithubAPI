@@ -7,7 +7,7 @@ import com.example.githubapi.feature.details.viewmodel.DetailsViewModel.DetailUi
 import com.example.githubapi.feature.details.viewmodel.DetailsViewModel.DetailUiState.Loading
 import com.example.githubapi.feature.details.viewmodel.DetailsViewModel.DetailUiState.Success
 import com.example.githubapi.feature.details.viewmodel.DetailsViewModel.DetailsEvent
-import com.example.githubapi.models.Details
+import com.example.githubapi.feature.details.models.Details
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

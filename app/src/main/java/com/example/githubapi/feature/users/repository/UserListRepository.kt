@@ -1,7 +1,7 @@
 package com.example.githubapi.feature.users.repository
 
 import com.example.githubapi.feature.users.mapper.UserListMapper
-import com.example.githubapi.models.User
+import com.example.githubapi.feature.users.models.User
 import com.example.githubapi.network.api.GitHubApiService
 import javax.inject.Inject
 

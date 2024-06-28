@@ -1,4 +1,4 @@
-package com.example.githubapi.models
+package com.example.githubapi.feature.users.models
 
 data class User(
     val name: String,

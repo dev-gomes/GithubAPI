@@ -15,8 +15,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.githubapi.feature.details.view.DetailsScreen
 import com.example.githubapi.feature.users.view.UsersScreen
-import com.example.githubapi.ui.navigation.DETAILS_SCREEN_ARGS
-import com.example.githubapi.ui.navigation.Screen
+import com.example.githubapi.navigation.DETAILS_SCREEN_ARGS
+import com.example.githubapi.navigation.Screen
 import com.example.githubapi.ui.theme.GithubAPITheme
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -1,7 +1,7 @@
 package com.example.githubapi.feature.details.domain
 
 import com.example.githubapi.feature.details.repository.DetailsRepository
-import com.example.githubapi.models.Details
+import com.example.githubapi.feature.details.models.Details
 import io.mockk.coEvery
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals

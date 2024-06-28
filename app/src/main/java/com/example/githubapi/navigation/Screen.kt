@@ -1,4 +1,4 @@
-package com.example.githubapi.ui.navigation
+package com.example.githubapi.navigation
 
 private const val USERS_SCREEN = "USERS_SCREEN"
 private const val DETAILS_SCREEN = "DETAILS_SCREEN"

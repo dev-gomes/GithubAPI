@@ -1,6 +1,6 @@
 package com.example.githubapi.feature.details.viewmodel
 
-import com.example.githubapi.models.Details
+import com.example.githubapi.feature.details.models.Details
 import kotlinx.coroutines.flow.StateFlow
 
 interface DetailsViewModel {

@@ -6,7 +6,7 @@ import com.example.githubapi.feature.users.domain.GetUserListUseCase
 import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UiState.*
 import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UserEvent
 import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UserIntent.NavigateToDetail
-import com.example.githubapi.ui.navigation.Screen.DetailScreen
+import com.example.githubapi.navigation.Screen.DetailScreen
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

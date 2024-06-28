@@ -22,7 +22,7 @@ import com.example.githubapi.feature.details.viewmodel.DetailsViewModel
 import com.example.githubapi.feature.details.viewmodel.DetailsViewModel.DetailUiState
 import com.example.githubapi.feature.details.viewmodel.DetailsViewModel.DetailsEvent.OnDetailsIdReceived
 import com.example.githubapi.feature.details.viewmodel.DetailsViewModelImpl
-import com.example.githubapi.models.Details
+import com.example.githubapi.feature.details.models.Details
 import com.example.githubapi.ui.theme.GithubAPITheme
 
 @Composable
