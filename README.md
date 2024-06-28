@@ -5,11 +5,11 @@ This application fetches and displays a list of GitHub users and allows navigati
 MVI (Model-View-Intent) + Clean Architecture
 
 ## Tech Stack
-DI: Hilt 
-Architecture: Jetpack Compose
-Navigation: Compose Navigation 
-Network Calls: Retrofit with OkHttp Interceptors
-Testing Frameworks: JUnit, MockK and Turbine
+- **DI**: Hilt 
+- **Architecture**: Jetpack Compose
+- **Navigation**: Compose Navigation 
+- **Network Calls**: Retrofit with OkHttp Interceptors
+- **Testing Frameworks**: JUnit, MockK and Turbine
 
 ### Main Components
 - **UsersScreen**: Fetch and display the list of GitHub users.
