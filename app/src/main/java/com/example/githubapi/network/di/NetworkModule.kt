@@ -26,7 +26,6 @@ object NetworkModule {
         .addNetworkInterceptor(httpLoggingInterceptor)
         .build()
 
-
     @Provides
     @Reusable
     fun provideLoggingInterceptor() =

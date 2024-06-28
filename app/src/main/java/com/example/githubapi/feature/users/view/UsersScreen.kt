@@ -1,6 +1,5 @@
 package com.example.githubapi.feature.users.view
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,7 +38,6 @@ fun UsersScreen(
 ) {
     LaunchedEffect(Unit) {
         viewModel.userIntent.collect { userIntent ->
-            Log.d("TAG1", "UsersScreen: intent $userIntent")
             when (userIntent) {
                 is UserIntent.NavigateToDetail -> {
                     navigationBlock(userIntent.route)
