@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "GithubAPI"
 include(":app")
- 
+include(":lib-data")
+include(":lib-domain")

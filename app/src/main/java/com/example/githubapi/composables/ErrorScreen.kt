@@ -6,13 +6,16 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.example.githubapi.R
+import com.example.githubapi.ui.theme.Dimensions
 
 @Composable
-fun ErrorScreen(errorMessage: String) {
+fun ErrorScreen() {
     Text(
-        text = "Error: $errorMessage",
-        modifier = Modifier.padding(16.dp)
+        text = stringResource(R.string.something_went_wrong),
+        modifier = Modifier
+            .padding(Dimensions.mediumPadding)
             .fillMaxSize()
             .wrapContentSize()
     )

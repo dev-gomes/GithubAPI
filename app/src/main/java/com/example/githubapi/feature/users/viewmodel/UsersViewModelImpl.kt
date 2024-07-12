@@ -2,12 +2,13 @@ package com.example.githubapi.feature.users.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.githubapi.feature.users.domain.GetUserListUseCase
 import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UiState
 import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UserEvent
 import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UserIntent
 import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UserIntent.NavigateToDetail
 import com.example.githubapi.navigation.Screen.DetailScreen
+import com.example.lib_domain.ResultType
+import com.example.lib_domain.usecases.GetUserListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,18 +34,16 @@ class UsersViewModelImpl @Inject constructor(
 
     override fun reduce(userEvent: UserEvent) {
         when (userEvent) {
-            is UserEvent.OnItemClicked -> {
+            is UserEvent.OnUserClicked -> {
                 _userIntent.trySend(NavigateToDetail(DetailScreen.createRoute(userEvent.userId)))
             }
         }
     }
 
     private suspend fun fetchUsers() {
-        try {
-            val users = getUserListUseCase.getUserList()
-            _uiState.value = UiState.Success(users)
-        } catch (e: Exception) {
-            _uiState.value = UiState.Error(e.message ?: "Unknown Error")
+        _uiState.value = when (val result = getUserListUseCase.getUserList()) {
+            is ResultType.Success -> UiState.Success(result.data)
+            is ResultType.Error -> UiState.Error
         }
     }
 }

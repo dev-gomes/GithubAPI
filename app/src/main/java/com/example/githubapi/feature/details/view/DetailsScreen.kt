@@ -11,19 +11,21 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.githubapi.R
 import com.example.githubapi.composables.ErrorScreen
 import com.example.githubapi.composables.LoadingScreen
 import com.example.githubapi.feature.details.viewmodel.DetailsViewModel
 import com.example.githubapi.feature.details.viewmodel.DetailsViewModel.DetailUiState
 import com.example.githubapi.feature.details.viewmodel.DetailsViewModel.DetailsEvent.OnDetailsIdReceived
 import com.example.githubapi.feature.details.viewmodel.DetailsViewModelImpl
-import com.example.githubapi.feature.details.models.Details
+import com.example.githubapi.ui.theme.Dimensions
 import com.example.githubapi.ui.theme.GithubAPITheme
+import com.example.lib_domain.model.Details
 
 @Composable
 fun DetailsScreen(
@@ -44,8 +46,7 @@ private fun DetailsContent(state: DetailUiState) {
     when (state) {
         is DetailUiState.Loading -> LoadingScreen()
         is DetailUiState.Success -> UserDetails(details = state.details)
-
-        is DetailUiState.Error -> ErrorScreen(errorMessage = state.message)
+        is DetailUiState.Error -> ErrorScreen()
     }
 }
 
@@ -59,15 +60,22 @@ fun UserDetails(details: List<Details>) {
 @Composable
 private fun DetailsListItem(it: Details) {
     Text(
-        modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp),
-        text = "Repository Name: ${it.name}",
+        modifier = Modifier.padding(
+            start = Dimensions.smallPadding,
+            end = Dimensions.smallPadding,
+            top = Dimensions.smallPadding
+        ),
+        text = stringResource(R.string.repository_name, it.name),
     )
     Text(
-        modifier = Modifier.padding(start = 8.dp, end = 8.dp),
-        text = "Description: ${it.description}",
+        modifier = Modifier.padding(
+            start = Dimensions.smallPadding,
+            end = Dimensions.smallPadding
+        ),
+        text = stringResource(R.string.description, it.description),
         maxLines = 3
     )
-    Spacer(modifier = Modifier.height(16.dp))
+    Spacer(modifier = Modifier.height(Dimensions.spacingMedium))
 }
 
 class DetailsScreenStateProvider : PreviewParameterProvider<DetailUiState> {
@@ -78,7 +86,7 @@ class DetailsScreenStateProvider : PreviewParameterProvider<DetailUiState> {
                 Details("My repository 1", "Description 2")
             )
         ),
-        DetailUiState.Error("Error"),
+        DetailUiState.Error,
         DetailUiState.Loading
     )
 }

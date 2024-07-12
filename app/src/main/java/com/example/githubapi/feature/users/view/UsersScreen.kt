@@ -18,7 +18,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.githubapi.composables.ErrorScreen
@@ -28,8 +27,9 @@ import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UiState
 import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UserEvent
 import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UserIntent
 import com.example.githubapi.feature.users.viewmodel.UsersViewModelImpl
-import com.example.githubapi.feature.users.models.User
+import com.example.githubapi.ui.theme.Dimensions
 import com.example.githubapi.ui.theme.GithubAPITheme
+import com.example.lib_domain.model.User
 
 @Composable
 fun UsersScreen(
@@ -63,10 +63,10 @@ private fun UsersContent(
         is UiState.Loading -> LoadingScreen()
 
         is UiState.Success -> UserList(users = state.data) {
-            onReduce(UserEvent.OnItemClicked(it))
+            onReduce(UserEvent.OnUserClicked(it))
         }
 
-        is UiState.Error -> ErrorScreen(errorMessage = state.message)
+        is UiState.Error -> ErrorScreen()
     }
 }
 
@@ -88,17 +88,17 @@ fun UserItem(user: User, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .padding(16.dp),
+            .padding(Dimensions.mediumPadding),
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
             model = user.avatarUrl,
             contentDescription = null,
             contentScale = ContentScale.FillWidth,
-            modifier = Modifier.size(40.dp)
+            modifier = Modifier.size(Dimensions.iconSizeLarge)
         )
         Text(
-            modifier = Modifier.padding(start = 16.dp),
+            modifier = Modifier.padding(start = Dimensions.mediumPadding),
             text = user.name
         )
     }
@@ -113,7 +113,7 @@ class ScreenStateProvider : PreviewParameterProvider<UiState> {
                 User("Username 3", "")
             )
         ),
-        UiState.Error("Error"),
+        UiState.Error,
         UiState.Loading
     )
 }

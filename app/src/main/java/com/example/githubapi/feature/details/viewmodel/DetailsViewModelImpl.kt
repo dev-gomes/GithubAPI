@@ -2,10 +2,11 @@ package com.example.githubapi.feature.details.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.githubapi.feature.details.domain.GetDetailsUseCase
 import com.example.githubapi.feature.details.viewmodel.DetailsViewModel.DetailUiState
 import com.example.githubapi.feature.details.viewmodel.DetailsViewModel.DetailsEvent
 import com.example.githubapi.feature.details.viewmodel.DetailsViewModel.DetailsEvent.OnDetailsIdReceived
+import com.example.lib_domain.ResultType
+import com.example.lib_domain.usecases.GetDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,11 +29,10 @@ class DetailsViewModelImpl @Inject constructor(
 
     private fun loadUserDetails(userId: String) {
         viewModelScope.launch {
-            try {
-                val details = getDetailsUseCase.getDetails(userId)
-                _uiState.value = DetailUiState.Success(details)
-            } catch (e: Exception) {
-                _uiState.value = DetailUiState.Error(e.message ?: "Unknown Error")
+            val details = getDetailsUseCase.getDetails(userId)
+            _uiState.value = when (details) {
+                is ResultType.Success -> DetailUiState.Success(details.data)
+                is ResultType.Error -> DetailUiState.Error
             }
         }
     }

@@ -1,6 +1,6 @@
 package com.example.githubapi.feature.users.viewmodel
 
-import com.example.githubapi.feature.users.models.User
+import com.example.lib_domain.model.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -13,7 +13,7 @@ interface UsersViewModel {
     sealed class UiState {
         data object Loading : UiState()
         data class Success(val data: List<User>) : UiState()
-        data class Error(val message: String) : UiState()
+        data object Error : UiState()
     }
 
     sealed class UserIntent {
@@ -21,6 +21,6 @@ interface UsersViewModel {
     }
 
     sealed class UserEvent {
-        data class OnItemClicked(val userId: String) : UserEvent()
+        data class OnUserClicked(val userId: String) : UserEvent()
     }
 }

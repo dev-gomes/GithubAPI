@@ -1,6 +1,6 @@
 package com.example.githubapi.feature.details.viewmodel
 
-import com.example.githubapi.feature.details.models.Details
+import com.example.lib_domain.model.Details
 import kotlinx.coroutines.flow.StateFlow
 
 interface DetailsViewModel {
@@ -11,7 +11,7 @@ interface DetailsViewModel {
     sealed class DetailUiState {
         data object Loading : DetailUiState()
         data class Success(val details: List<Details>) : DetailUiState()
-        data class Error(val message: String) : DetailUiState()
+        data object Error : DetailUiState()
     }
 
     sealed class DetailsEvent {
