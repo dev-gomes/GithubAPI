@@ -13,6 +13,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import retrofit2.Response
 
 class UserListRepositoryImplTest {
 
@@ -24,7 +25,7 @@ class UserListRepositoryImplTest {
     fun `GIVEN successful API call WHEN getUsers is called THEN user list is returned`() = runTest {
         val mockUserResponse = mockk<UserResponse>()
         val mockUser = mockk<User>()
-        coEvery { mockService.getUsers() } returns listOf(mockUserResponse)
+        coEvery { mockService.getUsers() } returns Response.success(listOf(mockUserResponse))
         every { mockMapper.from(listOf(mockUserResponse)) } returns listOf(mockUser)
 
         val result = subject.getUsers()

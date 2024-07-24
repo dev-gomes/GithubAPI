@@ -22,18 +22,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.githubapi.composables.ErrorScreen
 import com.example.githubapi.composables.LoadingScreen
+import com.example.githubapi.feature.users.viewmodel.UserEvent
+import com.example.githubapi.feature.users.viewmodel.UserIntent
+import com.example.githubapi.feature.users.viewmodel.UsersUiState
 import com.example.githubapi.feature.users.viewmodel.UsersViewModel
-import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UiState
-import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UserEvent
-import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UserIntent
-import com.example.githubapi.feature.users.viewmodel.UsersViewModelImpl
 import com.example.githubapi.ui.theme.Dimensions
 import com.example.githubapi.ui.theme.GithubAPITheme
 import com.example.lib_domain.model.User
 
 @Composable
 fun UsersScreen(
-    viewModel: UsersViewModel = hiltViewModel<UsersViewModelImpl>(),
+    viewModel: UsersViewModel = hiltViewModel(),
     navigationBlock: (String) -> Unit
 ) {
     LaunchedEffect(Unit) {
@@ -56,17 +55,17 @@ fun UsersScreen(
 
 @Composable
 private fun UsersContent(
-    state: UiState,
+    state: UsersUiState,
     onReduce: (UserEvent) -> Unit
 ) {
     when (state) {
-        is UiState.Loading -> LoadingScreen()
+        is UsersUiState.Loading -> LoadingScreen()
 
-        is UiState.Success -> UserList(users = state.data) {
+        is UsersUiState.Success -> UserList(users = state.data) {
             onReduce(UserEvent.OnUserClicked(it))
         }
 
-        is UiState.Error -> ErrorScreen()
+        is UsersUiState.Error -> ErrorScreen()
     }
 }
 
@@ -104,26 +103,26 @@ fun UserItem(user: User, onClick: () -> Unit) {
     }
 }
 
-class ScreenStateProvider : PreviewParameterProvider<UiState> {
+class ScreenStateProvider : PreviewParameterProvider<UsersUiState> {
     override val values = sequenceOf(
-        UiState.Success(
+        UsersUiState.Success(
             listOf(
                 User("Username 1", ""),
                 User("Username 2", ""),
                 User("Username 3", "")
             )
         ),
-        UiState.Error,
-        UiState.Loading
+        UsersUiState.Error,
+        UsersUiState.Loading
     )
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun UsersScreenPreview(@PreviewParameter(ScreenStateProvider::class) uiState: UiState) {
+private fun UsersScreenPreview(@PreviewParameter(ScreenStateProvider::class) usersUiState: UsersUiState) {
     GithubAPITheme {
         UsersContent(
-            state = uiState,
+            state = usersUiState,
             onReduce = { }
         )
     }

@@ -1,26 +1,46 @@
 package com.example.githubapi.feature.users.viewmodel
 
-import com.example.lib_domain.model.User
-import kotlinx.coroutines.flow.Flow
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.githubapi.feature.users.viewmodel.UserIntent.NavigateToDetail
+import com.example.githubapi.navigation.Screen.DetailScreen
+import com.example.lib_domain.ResultType
+import com.example.lib_domain.usecases.GetUserListUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-interface UsersViewModel {
-    val uiState: StateFlow<UiState>
-    val userIntent: Flow<UserIntent>
+@HiltViewModel
+class UsersViewModel @Inject constructor(
+    private val getUserListUseCase: GetUserListUseCase
+) : ViewModel() {
+    private val _userIntent = Channel<UserIntent>()
+    val userIntent = _userIntent.receiveAsFlow()
 
-    fun reduce(userEvent: UserEvent)
+    private val _uiState = MutableStateFlow<UsersUiState>(UsersUiState.Loading)
+    val uiState: StateFlow<UsersUiState> = _uiState.asStateFlow()
 
-    sealed class UiState {
-        data object Loading : UiState()
-        data class Success(val data: List<User>) : UiState()
-        data object Error : UiState()
+    init {
+        viewModelScope.launch { fetchUsers() }
     }
 
-    sealed class UserIntent {
-        data class NavigateToDetail(val route: String) : UserIntent()
+    fun reduce(userEvent: UserEvent) {
+        when (userEvent) {
+            is UserEvent.OnUserClicked -> {
+                _userIntent.trySend(NavigateToDetail(DetailScreen.createRoute(userEvent.userId)))
+            }
+        }
     }
 
-    sealed class UserEvent {
-        data class OnUserClicked(val userId: String) : UserEvent()
+    private suspend fun fetchUsers() {
+        _uiState.value = when (val result = getUserListUseCase.getUserList()) {
+            is ResultType.Success -> UsersUiState.Success(result.data)
+            is ResultType.Error -> UsersUiState.Error
+        }
     }
 }

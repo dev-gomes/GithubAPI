@@ -10,7 +10,7 @@ class UserListMapperTest {
     private val subject = UserListMapper()
 
     @Test
-    fun `from - maps the response correctly`() {
+    fun `GIVEN UserResponse WHEN from is called THEN User is returned`() {
         val name = "name"
         val avatarUrl = "avatarUrl"
         val userResponse = listOf(UserResponse(name, avatarUrl, 1))

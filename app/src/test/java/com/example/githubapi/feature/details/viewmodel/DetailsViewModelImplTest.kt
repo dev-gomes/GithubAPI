@@ -1,10 +1,9 @@
 package com.example.githubapi.feature.details.viewmodel
 
 import app.cash.turbine.test
-import com.example.githubapi.feature.details.viewmodel.DetailsViewModel.DetailUiState.Error
-import com.example.githubapi.feature.details.viewmodel.DetailsViewModel.DetailUiState.Loading
-import com.example.githubapi.feature.details.viewmodel.DetailsViewModel.DetailUiState.Success
-import com.example.githubapi.feature.details.viewmodel.DetailsViewModel.DetailsEvent
+import com.example.githubapi.feature.details.viewmodel.DetailUiState.Error
+import com.example.githubapi.feature.details.viewmodel.DetailUiState.Loading
+import com.example.githubapi.feature.details.viewmodel.DetailUiState.Success
 import com.example.githubapi.rules.MainDispatcherRule
 import com.example.lib_domain.ResultType
 import com.example.lib_domain.model.Details
@@ -20,7 +19,7 @@ class DetailsViewModelImplTest {
     @get:Rule
     val dispatcherRule = MainDispatcherRule()
     private val mockGetDetailsUseCase = mockk<GetDetailsUseCase>()
-    private val subject = DetailsViewModelImpl(mockGetDetailsUseCase)
+    private val subject = DetailsViewModel(mockGetDetailsUseCase)
 
     private val userId = "1"
 

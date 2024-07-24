@@ -1,11 +1,10 @@
 package com.example.githubapi.feature.users.viewmodel
 
 import app.cash.turbine.test
-import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UiState.Error
-import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UiState.Loading
-import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UiState.Success
-import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UserEvent
-import com.example.githubapi.feature.users.viewmodel.UsersViewModel.UserIntent.NavigateToDetail
+import com.example.githubapi.feature.users.viewmodel.UserIntent.NavigateToDetail
+import com.example.githubapi.feature.users.viewmodel.UsersUiState.Error
+import com.example.githubapi.feature.users.viewmodel.UsersUiState.Loading
+import com.example.githubapi.feature.users.viewmodel.UsersUiState.Success
 import com.example.githubapi.navigation.Screen.DetailScreen
 import com.example.githubapi.rules.MainDispatcherRule
 import com.example.lib_domain.ResultType
@@ -21,18 +20,14 @@ class UsersViewModelImplTest {
     @get:Rule
     val dispatcherRule = MainDispatcherRule()
     private val mockGetUserListUseCase = mockk<GetUserListUseCase>()
-    private lateinit var subject: UsersViewModelImpl
-
-    private fun setUp() {
-        subject = UsersViewModelImpl(mockGetUserListUseCase)
-    }
+    private lateinit var subject: UsersViewModel
 
     @Test
     fun `GIVEN successful API call WHEN init is called THEN correct uiState is emitted`() =
         runTest {
             coEvery { mockGetUserListUseCase.getUserList() } returns ResultType.Success(emptyList())
 
-            setUp()
+            initialiseSubject()
             subject.uiState.test {
                 assertEquals(Loading, awaitItem())
                 assertEquals(Success(data = emptyList()), awaitItem())
@@ -44,7 +39,7 @@ class UsersViewModelImplTest {
         runTest {
             coEvery { mockGetUserListUseCase.getUserList() } returns ResultType.Error(Exception())
 
-            setUp()
+            initialiseSubject()
             subject.uiState.test {
                 assertEquals(Loading, awaitItem())
                 assertEquals(Error, awaitItem())
@@ -52,12 +47,12 @@ class UsersViewModelImplTest {
         }
 
     @Test
-    fun `WHEN reduce is called with OnItemClicked THEN NavigateToDetail intent is sent`() =
+    fun `GIVEN OnItemClicked WHEN reduce is called THEN NavigateToDetail intent is sent`() =
         runTest {
             val userId = "1"
             coEvery { mockGetUserListUseCase.getUserList() } returns ResultType.Success(emptyList())
 
-            setUp()
+            initialiseSubject()
 
             subject.userIntent.test {
                 subject.reduce(UserEvent.OnUserClicked(userId = userId))
@@ -67,4 +62,8 @@ class UsersViewModelImplTest {
                 )
             }
         }
+
+    private fun initialiseSubject() {
+        subject = UsersViewModel(mockGetUserListUseCase)
+    }
 }

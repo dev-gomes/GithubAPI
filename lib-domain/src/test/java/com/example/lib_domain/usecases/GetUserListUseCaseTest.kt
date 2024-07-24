@@ -15,7 +15,7 @@ class GetUserListUseCaseTest {
     private val subject = GetUserListUseCase(mockRepository)
 
     @Test
-    fun `WHEN getUserList is called THEN user list is returned`() = runTest {
+    fun `GIVEN Success result type WHEN getUserList is called THEN user list is returned`() = runTest {
         val userList = ResultType.Success(emptyList<User>())
         coEvery { mockRepository.getUsers() } returns userList
 

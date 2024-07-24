@@ -1,20 +1,37 @@
 package com.example.githubapi.feature.details.viewmodel
 
-import com.example.lib_domain.model.Details
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.githubapi.feature.details.viewmodel.DetailsEvent.OnDetailsIdReceived
+import com.example.lib_domain.ResultType
+import com.example.lib_domain.usecases.GetDetailsUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-interface DetailsViewModel {
-    val uiState: StateFlow<DetailUiState>
+@HiltViewModel
+class DetailsViewModel @Inject constructor(
+    private val getDetailsUseCase: GetDetailsUseCase
+) : ViewModel() {
 
-    fun reduce(detailsEvent: DetailsEvent)
+    private val _uiState = MutableStateFlow<DetailUiState>(DetailUiState.Loading)
+    val uiState: StateFlow<DetailUiState> = _uiState
 
-    sealed class DetailUiState {
-        data object Loading : DetailUiState()
-        data class Success(val details: List<Details>) : DetailUiState()
-        data object Error : DetailUiState()
+    fun reduce(detailsEvent: DetailsEvent) {
+        when (detailsEvent) {
+            is OnDetailsIdReceived -> loadUserDetails(detailsEvent.userId)
+        }
     }
 
-    sealed class DetailsEvent {
-        data class OnDetailsIdReceived(val userId: String) : DetailsEvent()
+    private fun loadUserDetails(userId: String) {
+        viewModelScope.launch {
+            val details = getDetailsUseCase.getDetails(userId)
+            _uiState.value = when (details) {
+                is ResultType.Success -> DetailUiState.Success(details.data)
+                is ResultType.Error -> DetailUiState.Error
+            }
+        }
     }
 }

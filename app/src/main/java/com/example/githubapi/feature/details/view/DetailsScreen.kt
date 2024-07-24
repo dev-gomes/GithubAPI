@@ -19,10 +19,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.githubapi.R
 import com.example.githubapi.composables.ErrorScreen
 import com.example.githubapi.composables.LoadingScreen
+import com.example.githubapi.feature.details.viewmodel.DetailUiState
+import com.example.githubapi.feature.details.viewmodel.DetailUiState.Error
+import com.example.githubapi.feature.details.viewmodel.DetailUiState.Loading
+import com.example.githubapi.feature.details.viewmodel.DetailUiState.Success
+import com.example.githubapi.feature.details.viewmodel.DetailsEvent.OnDetailsIdReceived
 import com.example.githubapi.feature.details.viewmodel.DetailsViewModel
-import com.example.githubapi.feature.details.viewmodel.DetailsViewModel.DetailUiState
-import com.example.githubapi.feature.details.viewmodel.DetailsViewModel.DetailsEvent.OnDetailsIdReceived
-import com.example.githubapi.feature.details.viewmodel.DetailsViewModelImpl
 import com.example.githubapi.ui.theme.Dimensions
 import com.example.githubapi.ui.theme.GithubAPITheme
 import com.example.lib_domain.model.Details
@@ -30,7 +32,7 @@ import com.example.lib_domain.model.Details
 @Composable
 fun DetailsScreen(
     userId: String,
-    viewModel: DetailsViewModel = hiltViewModel<DetailsViewModelImpl>()
+    viewModel: DetailsViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
 
@@ -44,9 +46,9 @@ fun DetailsScreen(
 @Composable
 private fun DetailsContent(state: DetailUiState) {
     when (state) {
-        is DetailUiState.Loading -> LoadingScreen()
-        is DetailUiState.Success -> UserDetails(details = state.details)
-        is DetailUiState.Error -> ErrorScreen()
+        is Loading -> LoadingScreen()
+        is Success -> UserDetails(details = state.details)
+        is Error -> ErrorScreen()
     }
 }
 
@@ -80,14 +82,14 @@ private fun DetailsListItem(it: Details) {
 
 class DetailsScreenStateProvider : PreviewParameterProvider<DetailUiState> {
     override val values = sequenceOf(
-        DetailUiState.Success(
+        Success(
             listOf(
                 Details("My repository 1", "Description 2"),
                 Details("My repository 1", "Description 2")
             )
         ),
-        DetailUiState.Error,
-        DetailUiState.Loading
+        Error,
+        Loading
     )
 }
 

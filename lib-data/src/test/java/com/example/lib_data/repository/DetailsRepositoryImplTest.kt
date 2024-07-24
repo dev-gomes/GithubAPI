@@ -13,6 +13,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import retrofit2.Response
 
 class DetailsRepositoryImplTest {
 
@@ -27,7 +28,9 @@ class DetailsRepositoryImplTest {
         runTest {
             val mockDetailsResponse = mockk<DetailsResponse>()
             val mockDetails = mockk<Details>()
-            coEvery { mockService.getDetails(userId) } returns listOf(mockDetailsResponse)
+            coEvery { mockService.getDetails(userId) } returns Response.success(
+                listOf(mockDetailsResponse)
+            )
             every { mockMapper.from(listOf(mockDetailsResponse)) } returns listOf(mockDetails)
 
             val result = subject.getUserDetails(userId)

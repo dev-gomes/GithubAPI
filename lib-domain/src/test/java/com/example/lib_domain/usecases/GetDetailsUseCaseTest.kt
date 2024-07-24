@@ -15,7 +15,7 @@ class GetDetailsUseCaseTest {
     private val subject = GetDetailsUseCase(mockRepository)
 
     @Test
-    fun `WHEN getDetails is called THEN detail list is returned`() = runTest {
+    fun `GIVEN Success result type WHEN getDetails is called THEN detail list is returned`() = runTest {
         val userId = "userId"
         val detailsList = ResultType.Success(emptyList<Details>())
         coEvery { mockRepository.getUserDetails(userId) } returns detailsList
