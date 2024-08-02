@@ -20,3 +20,9 @@ MVI (Model-View-Intent) + Clean Architecture
 The application fetches data from the following GitHub API endpoint:
 - `GET https://api.github.com/users?since=2023`
 - `GET https://api.github.com/users/{userId}/repos`
+
+
+# Demo
+
+https://github.com/user-attachments/assets/e529ee79-2ca3-499d-98e9-c6176572c796
+
