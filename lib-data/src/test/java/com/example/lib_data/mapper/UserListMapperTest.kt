@@ -13,7 +13,8 @@ class UserListMapperTest {
     fun `GIVEN UserResponse WHEN from is called THEN User is returned`() {
         val name = "name"
         val avatarUrl = "avatarUrl"
-        val userResponse = listOf(UserResponse(name, avatarUrl, 1))
+        val id = 1
+        val userResponse = listOf(UserResponse(name, avatarUrl, id))
         val expected = User(name = name, avatarUrl = avatarUrl)
 
         val result = subject.from(userResponse)

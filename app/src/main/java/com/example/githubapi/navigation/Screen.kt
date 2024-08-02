@@ -1,11 +1,10 @@
 package com.example.githubapi.navigation
 
+import com.example.githubapi.util.NavigationConstants.DETAILS_SCREEN
+import com.example.githubapi.util.NavigationConstants.DETAILS_SCREEN_ARGS
+import com.example.githubapi.util.NavigationConstants.USERS_SCREEN
+
 sealed class Screen(val route: String) {
-    companion object {
-        const val DETAILS_SCREEN_ARGS = "USER_ID"
-        private const val USERS_SCREEN = "USERS_SCREEN"
-        private const val DETAILS_SCREEN = "DETAILS_SCREEN"
-    }
 
     data object ListScreen : Screen(USERS_SCREEN)
 

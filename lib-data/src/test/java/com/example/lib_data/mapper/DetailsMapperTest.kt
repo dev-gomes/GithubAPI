@@ -6,20 +6,22 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class DetailsMapperTest {
+    companion object {
+        private const val NAME = "name"
+        private const val DESCRIPTION = "description"
+    }
 
     private val subject = DetailsMapper()
-    private val name = "name"
 
     @Test
     fun `GIVEN non-null description WHEN from is called THEN response is correctly mapped`() {
-        val description = "description"
         val detailsResponse = listOf(
             DetailsResponse(
-                name = name,
-                description = description
+                name = NAME,
+                description = DESCRIPTION
             )
         )
-        val expected = Details(name = name, description = description)
+        val expected = Details(name = NAME, description = DESCRIPTION)
 
         val result = subject.from(detailsResponse)
 
@@ -31,11 +33,11 @@ class DetailsMapperTest {
     fun `GIVEN null description WHEN from is called THEN response is correctly mapped`() {
         val detailsResponse = listOf(
             DetailsResponse(
-                name = name,
+                name = NAME,
                 description = null
             )
         )
-        val expected = Details(name = name, description = "")
+        val expected = Details(name = NAME, description = "")
 
         val result = subject.from(detailsResponse)
 

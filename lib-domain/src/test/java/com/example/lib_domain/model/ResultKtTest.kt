@@ -13,18 +13,20 @@ import org.junit.Test
 import retrofit2.Response
 
 class SafeApiCallTest {
+    companion object {
+        private const val SUCCESS_DATA = "Success Data"
+    }
 
     private val mockApiCall = mockk<suspend () -> Response<String>>()
-    private val expectedData = "Success Data"
 
     @Test
     fun `GIVEN apiCall succeeds WHEN safeApiCall is called THEN Success with data is returned`() =
         runTest {
-            coEvery { mockApiCall() } returns Response.success(expectedData)
+            coEvery { mockApiCall() } returns Response.success(SUCCESS_DATA)
 
             val result = safeApiCall(mockApiCall)
 
-            assertEquals(ResultType.Success(expectedData), result)
+            assertEquals(ResultType.Success(SUCCESS_DATA), result)
         }
 
     @Test
@@ -40,10 +42,10 @@ class SafeApiCallTest {
 
     @Test
     fun `GIVEN success result WHEN asResults is called THEN success is mapped`() {
-        val result = ResultType.Success("data")
+        val result = ResultType.Success(SUCCESS_DATA)
         val mappedResult = result.asResult { it.length }
 
-        assertEquals(ResultType.Success(4), mappedResult)
+        assertEquals(ResultType.Success(12), mappedResult)
     }
 
     @Test
@@ -68,13 +70,13 @@ class SafeApiCallTest {
     @Test
     fun `GIVEN successful response with body WHEN toResult is called THEN Success is returned`() =
         runTest {
-            coEvery { mockApiCall() } returns Response.success(expectedData)
+            coEvery { mockApiCall() } returns Response.success(SUCCESS_DATA)
 
             val result = safeApiCall(mockApiCall)
 
             assertTrue(result is ResultType.Success)
             with(result as ResultType.Success) {
-                assertEquals(expectedData, data)
+                assertEquals(SUCCESS_DATA, data)
             }
         }
 

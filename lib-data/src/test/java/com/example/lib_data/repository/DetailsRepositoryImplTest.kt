@@ -17,27 +17,29 @@ import retrofit2.Response
 
 class DetailsRepositoryImplTest {
 
+    companion object {
+        private const val USER_ID = "userId"
+    }
+
     private val mockService = mockk<GitHubApiService>()
     private val mockMapper = mockk<DetailsMapper>()
     private val subject = DetailsRepositoryImpl(mockService, mockMapper)
-
-    private val userId = "userId"
 
     @Test
     fun `GIVEN successful API call WHEN getUserDetails is called THEN details list is returned`() =
         runTest {
             val mockDetailsResponse = mockk<DetailsResponse>()
             val mockDetails = mockk<Details>()
-            coEvery { mockService.getDetails(userId) } returns Response.success(
+            coEvery { mockService.getDetails(USER_ID) } returns Response.success(
                 listOf(mockDetailsResponse)
             )
             every { mockMapper.from(listOf(mockDetailsResponse)) } returns listOf(mockDetails)
 
-            val result = subject.getUserDetails(userId)
+            val result = subject.getUserDetails(USER_ID)
 
             assertEquals(ResultType.Success(listOf(mockDetails)), result)
             coVerify {
-                mockService.getDetails(userId)
+                mockService.getDetails(USER_ID)
                 mockMapper.from(listOf(mockDetailsResponse))
             }
         }
@@ -46,13 +48,13 @@ class DetailsRepositoryImplTest {
     fun `GIVEN un-successful API call WHEN getUserDetails is called THEN error is returned`() =
         runTest {
             val exception = Exception()
-            coEvery { mockService.getDetails(userId) } throws exception
+            coEvery { mockService.getDetails(USER_ID) } throws exception
 
-            val result = subject.getUserDetails(userId)
+            val result = subject.getUserDetails(USER_ID)
 
             assertEquals(ResultType.Error(exception), result)
             coVerify {
-                mockService.getDetails(userId)
+                mockService.getDetails(USER_ID)
                 mockMapper wasNot Called
             }
         }

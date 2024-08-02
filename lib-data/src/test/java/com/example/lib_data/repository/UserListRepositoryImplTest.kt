@@ -10,6 +10,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -28,7 +29,7 @@ class UserListRepositoryImplTest {
         coEvery { mockService.getUsers() } returns Response.success(listOf(mockUserResponse))
         every { mockMapper.from(listOf(mockUserResponse)) } returns listOf(mockUser)
 
-        val result = subject.getUsers()
+        val result = subject.getUsers().first()
 
         assertEquals(ResultType.Success(listOf(mockUser)), result)
         coVerify {
@@ -42,7 +43,7 @@ class UserListRepositoryImplTest {
         val exception = Exception()
         coEvery { mockService.getUsers() } throws exception
 
-        val result = subject.getUsers()
+        val result = subject.getUsers().first()
 
         assertEquals(ResultType.Error(exception), result)
         coVerify {

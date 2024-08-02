@@ -16,22 +16,25 @@ import org.junit.Rule
 import org.junit.Test
 
 class DetailsViewModelImplTest {
+
+    companion object {
+        private const val USER_ID = "1"
+    }
+
     @get:Rule
     val dispatcherRule = MainDispatcherRule()
     private val mockGetDetailsUseCase = mockk<GetDetailsUseCase>()
     private val subject = DetailsViewModel(mockGetDetailsUseCase)
 
-    private val userId = "1"
-
     @Test
     fun `GIVEN successful API call WHEN reduce is called with OnDetailsIdReceived THEN correct uiState is set`() =
         runTest {
             val mockDetails = mockk<Details>()
-            coEvery { mockGetDetailsUseCase.getDetails(userId) } returns ResultType.Success(
+            coEvery { mockGetDetailsUseCase.getDetails(USER_ID) } returns ResultType.Success(
                 listOf(mockDetails)
             )
 
-            subject.reduce(DetailsEvent.OnDetailsIdReceived(userId = userId))
+            subject.reduce(DetailsEvent.OnDetailsIdReceived(userId = USER_ID))
 
             subject.uiState.test {
                 assertEquals(Loading, awaitItem())
@@ -45,8 +48,8 @@ class DetailsViewModelImplTest {
     @Test
     fun `GIVEN un-successful API call WHEN reduce is called with OnDetailsIdReceived THEN correct uiState is set`() =
         runTest {
-            coEvery { mockGetDetailsUseCase.getDetails(userId) } returns ResultType.Error(Exception())
-            subject.reduce(DetailsEvent.OnDetailsIdReceived(userId = userId))
+            coEvery { mockGetDetailsUseCase.getDetails(USER_ID) } returns ResultType.Error(Exception())
+            subject.reduce(DetailsEvent.OnDetailsIdReceived(userId = USER_ID))
 
             subject.uiState.test {
                 assertEquals(Loading, awaitItem())

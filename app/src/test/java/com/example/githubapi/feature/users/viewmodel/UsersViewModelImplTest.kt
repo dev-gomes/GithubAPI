@@ -1,7 +1,6 @@
 package com.example.githubapi.feature.users.viewmodel
 
 import app.cash.turbine.test
-import com.example.githubapi.feature.users.viewmodel.UserIntent.NavigateToDetail
 import com.example.githubapi.feature.users.viewmodel.UsersUiState.Error
 import com.example.githubapi.feature.users.viewmodel.UsersUiState.Loading
 import com.example.githubapi.feature.users.viewmodel.UsersUiState.Success
@@ -11,8 +10,10 @@ import com.example.lib_domain.ResultType
 import com.example.lib_domain.usecases.GetUserListUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -22,12 +23,18 @@ class UsersViewModelImplTest {
     private val mockGetUserListUseCase = mockk<GetUserListUseCase>()
     private lateinit var subject: UsersViewModel
 
-    @Test
-    fun `GIVEN successful API call WHEN init is called THEN correct uiState is emitted`() =
-        runTest {
-            coEvery { mockGetUserListUseCase.getUserList() } returns ResultType.Success(emptyList())
+    @Before
+    fun setUp() {
+        subject = UsersViewModel(mockGetUserListUseCase)
+    }
 
-            initialiseSubject()
+    @Test
+    fun `GIVEN successful API call WHEN uiState is observed THEN correct uiState is emitted`() =
+        runTest {
+            coEvery { mockGetUserListUseCase.getUserList() } returns flow {
+                emit(ResultType.Success(emptyList()))
+            }
+
             subject.uiState.test {
                 assertEquals(Loading, awaitItem())
                 assertEquals(Success(data = emptyList()), awaitItem())
@@ -35,11 +42,12 @@ class UsersViewModelImplTest {
         }
 
     @Test
-    fun `GIVEN un-successful API call WHEN init is called THEN correct uiState is emitted`() =
+    fun `GIVEN un-successful API call WHEN uiState is observed THEN correct uiState is emitted`() =
         runTest {
-            coEvery { mockGetUserListUseCase.getUserList() } returns ResultType.Error(Exception())
+            coEvery { mockGetUserListUseCase.getUserList() } returns flow {
+                emit(ResultType.Error(Exception()))
+            }
 
-            initialiseSubject()
             subject.uiState.test {
                 assertEquals(Loading, awaitItem())
                 assertEquals(Error, awaitItem())
@@ -47,23 +55,32 @@ class UsersViewModelImplTest {
         }
 
     @Test
-    fun `GIVEN OnItemClicked WHEN reduce is called THEN NavigateToDetail intent is sent`() =
+    fun `WHEN reduce is called with OnItemClicked THEN NavigateToDetail intent is sent`() =
         runTest {
             val userId = "1"
-            coEvery { mockGetUserListUseCase.getUserList() } returns ResultType.Success(emptyList())
-
-            initialiseSubject()
+            coEvery { mockGetUserListUseCase.getUserList() } returns flow {
+                emit(ResultType.Success(emptyList()))
+            }
 
             subject.userIntent.test {
                 subject.reduce(UserEvent.OnUserClicked(userId = userId))
                 assertEquals(
-                    NavigateToDetail(route = DetailScreen.createRoute(userId)),
+                    UserIntent.NavigateToDetail(route = DetailScreen.createRoute(userId)),
                     awaitItem()
                 )
             }
         }
 
-    private fun initialiseSubject() {
-        subject = UsersViewModel(mockGetUserListUseCase)
-    }
+    @Test
+    fun `GIVEN exception during API call WHEN uiState is observed THEN correct uiState is emitted`() =
+        runTest {
+            coEvery { mockGetUserListUseCase.getUserList() } returns flow {
+                throw Exception()
+            }
+
+            subject.uiState.test {
+                assertEquals(Loading, awaitItem())
+                assertEquals(Error, awaitItem())
+            }
+        }
 }
